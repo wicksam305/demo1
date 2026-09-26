@@ -2,7 +2,7 @@
 //level 1,documentary demo
 #include <stdio.h>
 
-int productcount = 0;
+int productcount=0;
 char line[1024];
 
 typedef struct
@@ -37,6 +37,24 @@ int loadproducts()
     return productcount;
 }
 
+void save()
+{
+    FILE*file;
+    int i;
+    file=fopen("products.csv","w");
+    if (file==NULL)
+    {
+        printf("ERROR: no products.csv\n");
+        return;
+    }
+    fprintf(file,"code,name,price,category\n");
+    for (i=0;i<productcount;i++)
+    {
+        fprintf(file,"%s,%s,%.2f,%s\n",products[i].code,products[i].name,products[i].price,products[i].category);
+    }
+    fclose(file);
+}
+
 void initialize()
 {
     int i;
@@ -51,34 +69,16 @@ void initialize()
         {"003","Noodles", 6.00f,"Food"}
     };
 
-    productcount = 3;
+    productcount=3;
 
-    for (i = 0; i < productcount; i++)
-    {
-        products[i] = defaults[i];
-    }
-    void save();
-}
-
-void save()
-{
-    FILE*file;
-    int i;
-    file=fopen("products.csv","w");
-    if (file == NULL)
-    {
-        printf("ERROR: no products.csv\n");
-        return;
-    }
-    fprintf(file,"code,name,price,category\n");
     for (i=0;i<productcount;i++)
     {
-        fprintf(file,"%s,%s,%.2f,%s\n",products[i].code,products[i].name,products[i].price,products[i].category);
-    }
-    fclose(file);
+        products[i]=defaults[i];
+    };
+    save();
 }
 
-int main(void)
+int main()
 {
     loadproducts();
     initialize();
